@@ -6,7 +6,8 @@
 SCENARIO=$1
 REPO_DIR=~/datasets/AEC-Challenge
 SRC_DIR="$REPO_DIR/datasets/real"
-DEST_DIR=~/projects/audio_processing/test_data
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DEST_DIR="$SCRIPT_DIR/../test_data"
 
 if [ -z "$2" ]; then
   GUID=$(ls "$SRC_DIR" | grep "_${SCENARIO}_lpb.wav$" | sort -R | head -n 1 | sed "s/_${SCENARIO}_lpb.wav//")

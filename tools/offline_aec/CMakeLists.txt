@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
-project(walkie_talkie_engine)
+project(offline_aec)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(WEBRTC_AP_ROOT ${CMAKE_SOURCE_DIR}/../webrtc-audio-processing/pre_install/mac/arm64)
+# This file lives in tools/offline_aec; webrtc-audio-processing is a sibling of the repo.
+set(WEBRTC_AP_ROOT ${CMAKE_SOURCE_DIR}/../../../webrtc-audio-processing/pre_install/mac/arm64)
 
-add_executable(aec_test src/aec_test.cpp)
+add_executable(aec_test aec_test.cpp)
 
 target_include_directories(aec_test PRIVATE
     ${WEBRTC_AP_ROOT}/include/webrtc-audio-processing-1

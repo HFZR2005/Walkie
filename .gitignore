@@ -75,7 +75,15 @@ test_data/*
 *.wav
 
 
-# Python gitignores
-python/.venv/
-python/__pycache__/
-python/*.pyc
+# SwiftPM
+.build/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+DerivedData/
+xcuserdata/
+.netrc
+
+# Python
+tools/eval/.venv/
+**/__pycache__/
+*.pyc

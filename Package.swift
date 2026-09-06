@@ -1,12 +1,11 @@
 // swift-tools-version: 6.3
 import PackageDescription
 let package = Package(
-    name: "swift_test",
+    name: "Walkie",
     platforms: [
         .macOS(.v12)
     ],
     targets: [
-        // The C++ library target
         .target(
             name: "AudioProcessingCpp",
             path: "Sources/AudioProcessingCpp",
@@ -26,9 +25,8 @@ let package = Package(
             ])
     ]
         ),
-        // Your Swift target, now depending on the C++ one
         .executableTarget(
-            name: "swift_test",
+            name: "Walkie",
             dependencies: ["AudioProcessingCpp"],
             swiftSettings: [
                 .interoperabilityMode(.Cxx)
