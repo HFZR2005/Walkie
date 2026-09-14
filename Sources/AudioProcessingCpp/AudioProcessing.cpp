@@ -4,11 +4,6 @@
 #include "include/dr_wav.h"
 #include "include/processAudio.hpp"
 #include "modules/audio_processing/include/audio_processing.h"
-#include <atomic>
-#include <chrono>
-#include <cstdint>
-#include <cstring>
-#include <iostream>
 #include <memory>
 #include <thread>
 

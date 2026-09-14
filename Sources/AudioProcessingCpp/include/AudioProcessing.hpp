@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <memory>
 
+using std::array;
 using std::shared_ptr;
 
 class AudioBridge {
@@ -9,9 +10,11 @@ public:
   AudioBridge();
   ~AudioBridge();
   int processFrame();
-  // Process every complete near+far pair currently queued. Returns frames written.
+  // Process every complete near+far pair currently queued. Returns frames
+  // written.
   int processAvailableFrames();
-  // Skip WebRTC so queue/copy bugs can be tested without AEC/AGC changing samples.
+  // Skip WebRTC so queue/copy bugs can be tested without AEC/AGC changing
+  // samples.
   void setPassthrough(bool enabled);
   bool pushNearEnd(const int16_t *sample, int sampleCount);
   bool pushFarEnd(const int16_t *sample, int sampleCount);

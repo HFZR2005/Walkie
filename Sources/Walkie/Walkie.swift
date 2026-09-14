@@ -13,11 +13,14 @@ let farEndConverter = AVAudioConverter(
     from: engine.mainMixerNode.outputFormat(forBus: 0), to: desiredFormat)!
 
 let playerNode = AVAudioPlayerNode()
-let testFileURL = URL(fileURLWithPath: "test_mono.wav")
+let testFileURL = URL(fileURLWithPath: "swift_test/test_mono.wav")
 let audioFile = try AVAudioFile(forReading: testFileURL)
 
 var audioBridge = AudioBridge()
-var network = Network(&audioBridge)
+
+
+let listenPort = CommandLine.arguments[1]
+var network = Network(&audioBridge, listenPort)
 
 func extractInt16Samples(fromFloatBuffer buffer: AVAudioPCMBuffer) -> [Int16] {
     let frameCount = Int(buffer.frameLength)
@@ -121,7 +124,7 @@ engine.mainMixerNode.installTap(onBus: 0, bufferSize: 1024, format: nil) { @Send
 
 playerNode.scheduleFile(audioFile, at: nil)
 
-let pollTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+let pollTimer = Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { _ in
     network.poll()
 }
 

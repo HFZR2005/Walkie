@@ -5,6 +5,9 @@ let package = Package(
     platforms: [
         .macOS(.v12)
     ],
+    dependencies: [
+        .package(url: "https://github.com/google/swift-benchmark", from: "0.1.0")
+    ],
     targets: [
         .target(
             name: "AudioProcessingCpp",
@@ -40,6 +43,25 @@ let package = Package(
             path: "Tests/AudioProcessingTests",
             cxxSettings: [
                 .unsafeFlags(["-std=c++17"])
+           ],
+            linkerSettings: [
+                .linkedFramework("CoreFoundation")
+            ]
+        ),
+        // C++ benchmarks: `swift run -c release AudioProcessingBenchmarks`
+        // (release build required — debug timings are meaningless.)
+        .executableTarget(
+            name: "AudioProcessingBenchmarks",
+            dependencies: [
+                "AudioProcessingCpp",
+                .product(name: "Benchmark", package: "swift-benchmark")
+            ],
+            path: "Tests/AudioProcessingBenchmarks",
+            cxxSettings: [
+                .unsafeFlags(["-std=c++17"])
+            ],
+            swiftSettings: [
+                .interoperabilityMode(.Cxx)
             ],
             linkerSettings: [
                 .linkedFramework("CoreFoundation")
