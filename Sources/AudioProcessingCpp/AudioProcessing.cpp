@@ -20,10 +20,10 @@ public:
 
   StreamConfig streamConfig;
 
-  RingBuffer<int16_t, 16384> nearEndBuffer; // Mic -> [nearEndBuffer] --> AEC3
-  RingBuffer<int16_t, 16384> farEndBuffer;  // Network -> [farEndBuffer] -> AEC3
-  RingBuffer<int16_t, 16384> outputBuffer;  // AEC3 -> [outputBuffer] -> Network
-  RingBuffer<int16_t, 16384> pbackBuffer; // Network -> [pbackBuffer] -> Speaker
+  RingBuffer<int16_t, 16384> nearEndBuffer; // Mic -> nearEnd -> AEC3
+  RingBuffer<int16_t, 16384> farEndBuffer;  // Mixer tap -> farEnd -> AEC3
+  RingBuffer<int16_t, 16384> outputBuffer;  // AEC3 -> output -> Sender
+  RingBuffer<int16_t, 16384> pbackBuffer;   // Receiver -> pback -> speaker
 
   std::atomic<bool> running{false};
   std::atomic<bool> passthrough{false};
@@ -127,6 +127,10 @@ int AudioBridge::queuedOutput() {
   return static_cast<int>(impl->outputBuffer.size());
 }
 
+int AudioBridge::queuedPlayback() {
+  return static_cast<int>(impl->pbackBuffer.size());
+}
+
 bool AudioBridge::pushNearEnd(const int16_t *sample, int sampleCount) {
   if (!sample || sampleCount <= 0) {
     return false;
@@ -147,8 +151,22 @@ bool AudioBridge::pushFarEnd(const int16_t *sample, int sampleCount) {
   return true;
 }
 
+bool AudioBridge::pushPlayback(const int16_t *sample, int sampleCount) {
+  if (!sample || sampleCount <= 0) {
+    return false;
+  }
+  for (int i = 0; i < sampleCount; i++) {
+    impl->pbackBuffer.push(sample[i]);
+  }
+  return true;
+}
+
 bool AudioBridge::popOutput(int16_t &out) {
   return impl->outputBuffer.pop(out);
+}
+
+bool AudioBridge::popPlayback(int16_t &out) {
+  return impl->pbackBuffer.pop(out);
 }
 
 void AudioBridge::stop() { impl->stop(); }

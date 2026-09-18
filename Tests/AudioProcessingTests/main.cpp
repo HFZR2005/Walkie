@@ -16,7 +16,7 @@
 //    next to it, then declare it here and add it to the registry in main).
 // 2. Use CHECK / CHECK_EQ. On failure they print file:line and fail the run.
 // 3. Register it:  run("your_name", testYourName);
-// 4. Run from the swift_test directory:
+// 4. Run from the repo root:
 //      swift run AudioProcessingTests
 //
 // Pick the right mode
@@ -213,6 +213,22 @@ void testTwoFramesStayInOrder() {
   CHECK(popAll(bridge) == near);
 }
 
+void testPushPlaybackPreservesRamp() {
+  // Recv -> pback must walk every sample, same as near/far pushes.
+  AudioBridge bridge;
+  const auto samples = ramp(kSamplesPerFrame);
+  CHECK(bridge.pushPlayback(samples.data(), static_cast<int>(samples.size())));
+  CHECK_EQ(bridge.queuedPlayback(), kSamplesPerFrame);
+
+  std::vector<int16_t> output;
+  int16_t sample = 0;
+  while (bridge.popPlayback(sample)) {
+    output.push_back(sample);
+  }
+  CHECK(output == samples);
+  CHECK_EQ(bridge.queuedPlayback(), 0);
+}
+
 void testRejectsInvalidPushes() {
   AudioBridge bridge;
   bridge.setPassthrough(true);
@@ -277,6 +293,7 @@ int main() {
   run("waits_for_both_queues_before_processing",
       testWaitsForBothQueuesBeforeProcessing);
   run("two_frames_stay_in_order", testTwoFramesStayInOrder);
+  run("push_playback_preserves_ramp", testPushPlaybackPreservesRamp);
   run("rejects_invalid_pushes", testRejectsInvalidPushes);
   run("processed_output_is_not_uninitialized_garbage",
       testProcessedOutputIsNotUninitializedGarbage);
