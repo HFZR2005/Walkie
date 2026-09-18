@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Walkie uses the microphone to send your voice to the other phone.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Walkie sends voice to another device on the local network.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_walkie._udp</string>
+	</array>
+	<key>UILaunchScreen</key>
+	<dict/>
+</dict>
+</plist>

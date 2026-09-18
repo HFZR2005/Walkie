@@ -86,14 +86,16 @@ public:
 AudioBridge::AudioBridge() {
   // Set up apm
   AudioProcessing::Config config;
-  config.pre_amplifier.enabled = true;
   config.gain_controller1.enabled = true;
   config.gain_controller1.mode =
       AudioProcessing::Config::GainController1::kAdaptiveDigital;
   config.gain_controller2.enabled = true;
   config.high_pass_filter.enabled = true;
-  config.voice_detection.enabled = true;
   config.echo_canceller.enabled = true;
+  config.noise_suppression.enabled = true;
+  config.noise_suppression.level =
+      AudioProcessing::Config::NoiseSuppression::kHigh;
+  config.transient_suppression.enabled = true;
 
   rtc::scoped_refptr<AudioProcessing> apm(AudioProcessingBuilder().Create());
   apm->ApplyConfig(config);
