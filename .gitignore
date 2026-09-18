@@ -87,3 +87,6 @@ xcuserdata/
 tools/eval/.venv/
 **/__pycache__/
 *.pyc
+
+# Editor
+.vscode/
